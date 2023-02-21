@@ -1,18 +1,15 @@
 const container = document.createElement('div');
 container.classList.add('container');
 document.body.appendChild(container);
+
 const sizeSlider = document.getElementById('sizeSlider');
 const size = document.querySelector('.result');
+const reset = document.querySelector('.reset');
+const equalize = document.querySelector('equalize');
 
-const redColor = document.querySelector('.red');
-const blueColor = document.querySelector('.blue');
-const greenColor = document.querySelector('.green');
-const yellowColor = document.querySelector('.yellow');
+let totalDivComponents;
 
 let currentColor = "white";
-
-let rowCount;
-let divList;
 
 buildGrid(1);
 
@@ -21,8 +18,7 @@ sizeSlider.oninput = function () {
 }
 
 function buildGrid(count) {
-    let toBeDestroyed = container.getElementsByClassName('row');
-    toBeDestroyed += container.getElementsByClassName('div-component');
+   
     while (container.firstChild) {
         container.removeChild(container.lastChild);
     }
@@ -33,43 +29,42 @@ function buildGrid(count) {
         for (let y = 0; y < count; y++) {
             const divComponent = document.createElement('div');
             divComponent.classList.add('div-component');
-            divComponent.addEventListener('mousedown', changeColor);
+            divComponent.id = `${x},${y}`;
             divComponent.addEventListener('mouseover', onMouseOver);
-            divComponent.addEventListener('mouseleave', onMouseLeave);
             row.appendChild(divComponent);
         }
         container.appendChild(row);
 
     }
+
     recalculateDivList();
 }
 
-redColor.onclick = function () {
-    currentColor = "red";
+function equalizeColors(){
+
 }
-blueColor.onclick = function () {
-    currentColor = "blue";
-}
-greenColor.onclick = function () {
-    currentColor = "green";
-}
-yellowColor.onclick = function () {
-    currentColor = "yellow";
+
+
+reset.onclick = function (){
+    buildGrid(sizeSlider.value);
 }
 
 function recalculateDivList() {
-    divList = container.children;
-    console.log(divList);
+    /*let totalDivComponents = container.getElementsByClassName('row');*/
+   let totalDivComponents = container.getElementsByClassName('div-component');
+    console.log(totalDivComponents);
 }
 
-function changeColor() {
+function onMouseOver() {
+    getRandomColor();
     this.style.backgroundColor = currentColor;
 }
-function onMouseOver() {
-    this.style.border = "2px dashed white";
-    console.log("over");
-}
-function onMouseLeave() {
-    this.style.backgroundColor -= "red";
-    this.style.border = "1px solid black";
+
+function getRandomColor(){
+    let r = Math.trunc(Math.random()*255);
+    let g = Math.trunc(Math.random()*255);
+    let b = Math.trunc(Math.random()*255);
+
+    currentColor = `rgb(${r},${g},${b})`;
+    console.log(currentColor);
 }
